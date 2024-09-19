@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using WXFramwork.Core;
+using WXFramwork.Event;
 
 namespace WXFramwork
 {
@@ -9,7 +10,10 @@ namespace WXFramwork
         void Start()
         {
             DontDestroyOnLoad(gameObject);
-            
+            //代码类型
+            GameFrameworkEntry.Instance.AddSingleton<CodeTypes>();
+            //事件
+            GameFrameworkEntry.Instance.AddSingleton<EventManager>();
         }
 
         /// <summary>
