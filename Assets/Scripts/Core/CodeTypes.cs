@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using UnityEngine;
 
 namespace WXFramwork.Core
 {
@@ -82,7 +83,7 @@ namespace WXFramwork.Core
         private static Assembly[] GetAllAssembly()
         {
             List<Assembly> list = new List<Assembly>();
-            
+#if UNITY_EDITOR
             Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
             foreach (Assembly assembly in assemblies)
             {
@@ -92,8 +93,10 @@ namespace WXFramwork.Core
                     list.Add(assembly);
                 }
             }
-
             return list.ToArray();
+#else 
+            throw new Exception("程序集未配置, 需要配置对应的程序集");
+#endif
         }
         
         /// <summary>
