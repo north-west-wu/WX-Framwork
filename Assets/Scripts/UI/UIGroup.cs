@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace WXFramwork.UI
@@ -8,7 +9,7 @@ namespace WXFramwork.UI
         private string _groupName;
         private int _depth;
         private Canvas _canvas;
-        private bool _pause;
+        private bool _cover;
         private List<IUIWindow> _uiWindows;
 
         public UIGroup(Canvas canvas, string name, int depth)
@@ -48,30 +49,46 @@ namespace WXFramwork.UI
                 Refresh();
             }
         }
-
-        public bool Pause
+        
+        /// <summary>
+        /// 组是否被覆盖（隐藏）
+        /// </summary>
+        public bool Cover
         {
-            get => _pause;
+            get => _cover;
             set
             {
-                if (_pause == value)
+                if (_cover == value)
                 {
                     return;
                 }
 
-                _pause = value;
+                _cover = value;
                 //刷新
                 Refresh();
             }
         }
-        
-        public int UIFormCount { get; }
-        
-        public IUIWindow CurrentUIWindow { get; }
+
+        public int UIFormCount
+        {
+            get => _uiWindows.Count;
+        }
+
+        public IUIWindow CurrentUIWindow
+        {
+            get => _uiWindows.Last();
+        }
 
         public void Update()
         {
-            throw new System.NotImplementedException();
+            for (int i = 0; i < _uiWindows.Count; i++)
+            {
+                IUIWindow uiWindow = _uiWindows[i];
+                if (!uiWindow.IsCover)
+                {
+                    uiWindow.Update();
+                }
+            }
         }
         
         /// <summary>
@@ -103,9 +120,14 @@ namespace WXFramwork.UI
             
             //创建 UIWindow
             IUIWindow uiWindow = null;
+            //加载 UIWindow
+            uiWindow.Load();
             
-            //进栈，但不直接刷新
+            //加入列表
             _uiWindows.Add(uiWindow);
+            
+            //刷新
+            Refresh();
         }
         
         /// <summary>
@@ -119,8 +141,14 @@ namespace WXFramwork.UI
                 return;
             }
             
-            //界面关闭
-            uiWindow.Close();
+            //移除
+            _uiWindows.Remove(uiWindow);
+            //界面隐藏
+            uiWindow.Hide();
+            //界面销毁
+            uiWindow.Destroy();
+            //刷新
+            Refresh();
         }
 
         public IUIWindow GetUIWindow(int uiWindowId)
@@ -138,7 +166,13 @@ namespace WXFramwork.UI
 
         public IUIWindow[] GetAllUIWindows()
         {
-            throw new System.NotImplementedException();
+            return _uiWindows.ToArray();
+        }
+
+        public void Refocus(int uiWindowId)
+        {
+            IUIWindow uiWindow = GetUIWindow(uiWindowId);
+            
         }
 
         /// <summary>
@@ -146,7 +180,40 @@ namespace WXFramwork.UI
         /// </summary>
         public void Refresh()
         {
-            bool pause = _pause;
+            if (_uiWindows.Count <= 0)
+            {
+                return;
+            }
+            
+            bool cover = _cover;
+            for (int i = _uiWindows.Count - 1; i >= 0; i--)
+            {
+                IUIWindow uiWindow = _uiWindows[i];
+                uiWindow.DepthChanged(Depth * 10000 + i + 1);
+                //组覆盖状态
+                if (cover)
+                {
+                    if (!uiWindow.IsCover)
+                    {
+                        uiWindow.IsCover = true;
+                        uiWindow.Cover();
+                    }
+                }
+                //组非覆盖状态
+                else
+                {
+                    if (uiWindow.IsCover)
+                    {
+                        uiWindow.IsCover = false;
+                        uiWindow.Reveal();
+                    }
+
+                    if (uiWindow.IsOtherCovered)
+                    {
+                        cover = true;
+                    }
+                }
+            }
         }
         
         /// <summary>
