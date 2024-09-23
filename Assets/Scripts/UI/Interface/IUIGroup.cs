@@ -24,7 +24,7 @@ namespace WXFramwork.UI
         /// <summary>
         /// 获取或设置界面组是否暂停。
         /// </summary>
-        bool Pause
+        bool Cover
         {
             get;
             set;
