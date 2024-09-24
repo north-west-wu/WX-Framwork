@@ -1,16 +1,10 @@
-﻿namespace WXFramwork.UI
+﻿using UnityEngine;
+
+namespace WXFramwork.UI
 {
     public interface IUIWindow
     {
         int WindowId
-        {
-            get;
-        }
-        
-        /// <summary>
-        /// 界面名字
-        /// </summary>
-        string WindowName
         {
             get;
         }
@@ -48,17 +42,7 @@
         /// <summary>
         /// 打开
         /// </summary>
-        void Load();
-
-        /// <summary>
-        /// 显示
-        /// </summary>
-        void Show();
-        
-        /// <summary>
-        /// 隐藏
-        /// </summary>
-        void Hide();
+        void Load(Transform parent);
         
         /// <summary>
         /// 覆盖
