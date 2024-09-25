@@ -17,6 +17,17 @@ namespace WXFramwork
             GameFrameworkEntry.Instance.AddSingleton<EventManager>();
             //UI
             GameFrameworkEntry.Instance.AddSingleton<UIManager>();
+            //添加 UI 组
+            UIManager.Instance.AddUIGroup(transform.Find("UIManager/Low").gameObject, UIGroupId.Low);
+            UIManager.Instance.AddUIGroup(transform.Find("UIManager/Mid").gameObject, UIGroupId.Mid);
+            UIManager.Instance.AddUIGroup(transform.Find("UIManager/High").gameObject, UIGroupId.High);
+            
+            //打开 UI
+            UIManager.Instance.OpenUIWindow(UIGroupId.Mid, UIWindowId.Main);
+            // UIManager.Instance.OpenUIWindow(UIGroupId.Mid, UIWindowId.Main2);
+            // UIManager.Instance.RefocusUIWindow(UIGroupId.Mid, UIWindowId.Main);
+            // UIManager.Instance.RefocusUIWindow(UIGroupId.Mid, UIWindowId.Main2);
+            // UIManager.Instance.CloseUIWindow(UIGroupId.Mid, UIWindowId.Main2);
         }
 
         /// <summary>

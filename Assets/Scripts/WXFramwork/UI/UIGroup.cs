@@ -113,7 +113,7 @@ namespace WXFramwork.UI
         /// </summary>
         public void PushUIWindow(int uiWindowId)
         {
-            if (!HasUIWindow(uiWindowId))
+            if (HasUIWindow(uiWindowId))
             {
                 Debug.LogError("当前UI界面已存在，无需添加");
                 return;
@@ -188,7 +188,7 @@ namespace WXFramwork.UI
         /// <summary>
         /// 激活对应面板
         /// </summary>
-        public void Refocus(int uiWindowId)
+        public void RefocusUIWindow(int uiWindowId)
         {
             int index = -1;
             for (int i = 0; i < _uiWindows.Count; i++)

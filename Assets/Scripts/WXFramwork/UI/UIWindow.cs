@@ -61,8 +61,8 @@ namespace WXFramwork.UI
         public void Load(Transform parent)
         {
             //资源加载先使用 AssetDatabase 同步加载，后续完善资源管理和加载模块
-            _gameObject = AssetDatabase.LoadAssetAtPath<GameObject>(_auiBase.AssetPath);
-            
+            GameObject gameObjectRes = AssetDatabase.LoadAssetAtPath<GameObject>(_auiBase.AssetPath);
+            _gameObject = Object.Instantiate(gameObjectRes);
             RectTransform transform = _gameObject.GetComponent<RectTransform>();
             transform.anchorMin = Vector2.zero;
             transform.anchorMax = Vector2.one;
@@ -84,16 +84,18 @@ namespace WXFramwork.UI
 
         public void Cover()
         {
-            _auiBase.OnShow();
+            _auiBase.OnHide();
             
-            _gameObject.SetActive(true);
+            _gameObject.SetActive(false);
+            
         }
 
         public void Reveal()
         {
-            _auiBase.OnHide();
+            _auiBase.OnShow();
             
-            _gameObject.SetActive(false);
+            _gameObject.transform.SetAsLastSibling();
+            _gameObject.SetActive(true);
         }
 
         public void Destroy()
@@ -110,7 +112,7 @@ namespace WXFramwork.UI
             _gameObject.GetComponentsInChildren(true, _cachedCanvasContainer);
             for (int i = 0; i < _cachedCanvasContainer.Count; i++)
             {
-                _cachedCanvasContainer[i].sortingOrder += depth;
+                _cachedCanvasContainer[i].sortingOrder = depth + i;
             }
 
             _cachedCanvasContainer.Clear();

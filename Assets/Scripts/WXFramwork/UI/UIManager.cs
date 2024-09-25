@@ -94,7 +94,7 @@ namespace WXFramwork.UI
         {
             if (!HasUIGroup(uiGroupId))
             {
-                Debug.Log($"不存在 Group : {uiGroupId}，无需移除");
+                Debug.LogError($"不存在 Group : {uiGroupId}，无需移除");
                 return false;
             }
 
@@ -110,7 +110,14 @@ namespace WXFramwork.UI
         /// <param name="uiWindowId">界面Id</param>
         public void OpenUIWindow(int uiGroupId, int uiWindowId)
         {
-            
+            if (!HasUIGroup(uiGroupId))
+            {
+                Debug.LogError($"不存在 Group : {uiGroupId}，无需移除");
+                return;
+            }
+
+            IUIGroup uiGroup = _uiGroups[uiGroupId];
+            uiGroup.PushUIWindow(uiWindowId);
         }
         
         /// <summary>
@@ -120,7 +127,31 @@ namespace WXFramwork.UI
         /// <param name="uiWindowId">界面Id</param>
         public void CloseUIWindow(int uiGroupId, int uiWindowId)
         {
-            
+            if (!HasUIGroup(uiGroupId))
+            {
+                Debug.LogError($"不存在 Group : {uiGroupId}，无需移除");
+                return;
+            }
+
+            IUIGroup uiGroup = _uiGroups[uiGroupId];
+            uiGroup.PopUIWindow(uiWindowId);
+        }
+
+        /// <summary>
+        /// 激活界面。
+        /// </summary>
+        /// <param name="uiGroupId">组Id</param>
+        /// <param name="uiWindowId">界面Id</param>
+        public void RefocusUIWindow(int uiGroupId, int uiWindowId)
+        {
+            if (!HasUIGroup(uiGroupId))
+            {
+                Debug.LogError($"不存在 Group : {uiGroupId}，无需移除");
+                return;
+            }
+
+            IUIGroup uiGroup = _uiGroups[uiGroupId];
+            uiGroup.RefocusUIWindow(uiWindowId);
         }
     }
 }
