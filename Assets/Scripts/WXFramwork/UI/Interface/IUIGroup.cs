@@ -62,6 +62,8 @@ namespace WXFramwork.UI
         /// 弹出 UI 界面
         /// </summary>
         void PopUIWindow(int uiWindowId);
+
+        void RemoveAllUIWindows();
         
         /// <summary>
         /// 从界面组中获取所有界面。

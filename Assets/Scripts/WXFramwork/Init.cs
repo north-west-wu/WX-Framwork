@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using WXFramwork.Core;
 using WXFramwork.Event;
+using WXFramwork.UI;
 
 namespace WXFramwork
 {
@@ -14,6 +15,8 @@ namespace WXFramwork
             GameFrameworkEntry.Instance.AddSingleton<CodeTypes>();
             //事件
             GameFrameworkEntry.Instance.AddSingleton<EventManager>();
+            //UI
+            GameFrameworkEntry.Instance.AddSingleton<UIManager>();
         }
 
         /// <summary>
