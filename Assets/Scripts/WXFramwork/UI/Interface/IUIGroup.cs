@@ -62,7 +62,15 @@ namespace WXFramwork.UI
         /// 弹出 UI 界面
         /// </summary>
         void PopUIWindow(int uiWindowId);
-
+        
+        /// <summary>
+        /// 聚焦UI
+        /// </summary>
+        public void RefocusUIWindow(int uiWindowId);
+        
+        /// <summary>
+        /// 移除所有 UI
+        /// </summary>
         void RemoveAllUIWindows();
         
         /// <summary>
