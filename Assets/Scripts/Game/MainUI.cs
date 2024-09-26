@@ -1,5 +1,5 @@
 using UnityEngine;
-using WXFramwork.UI;
+using WXFramework.UI;
 
 namespace Game
 {
