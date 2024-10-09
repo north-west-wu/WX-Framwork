@@ -4,8 +4,11 @@ using System.Linq;
 using System.Threading;
 using UnityEngine;
 
-namespace WXFramework.ReferencePool
+namespace WXFramework.Pool
 {
+    /// <summary>
+    /// 引用池
+    /// </summary>
     public class ReferencePool
     {
         //引用队列(线程安全)
@@ -26,12 +29,12 @@ namespace WXFramework.ReferencePool
             {
                 if (_references.TryDequeue(out IReference item))
                 {
-                    Interlocked.Increment(ref _referenceCount);
+                    Interlocked.Decrement(ref _referenceCount);
                     return item;
                 }
             }
             
-            return Activator.CreateInstance(_referenceType) as IReference;;
+            return Activator.CreateInstance(_referenceType) as IReference;
         }
 
         public void Return(IReference reference)
@@ -43,7 +46,7 @@ namespace WXFramework.ReferencePool
                 return;
             }
             _references.Enqueue(reference);
-            Interlocked.Decrement(ref _referenceCount);
+            Interlocked.Increment(ref _referenceCount);
         }
     }
 }

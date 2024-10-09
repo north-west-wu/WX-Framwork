@@ -3,7 +3,6 @@ using UnityEngine;
 using WXFramework.Core;
 using WXFramework.Event;
 using WXFramework.Pool;
-using WXFramework.ReferencePool;
 using WXFramework.UI;
 
 namespace WXFramwork
@@ -20,7 +19,7 @@ namespace WXFramwork
             //引用池
             GameFrameworkEntry.Instance.AddSingleton<ReferenceManager>();
             //游戏对象池
-            GameFrameworkEntry.Instance.AddSingleton<ObjectPoolManager>();
+            //GameFrameworkEntry.Instance.AddSingleton<ObjectPoolManager>();
             //UI
             GameFrameworkEntry.Instance.AddSingleton<UIManager>();
             UIManager.Instance.AddUIGroup(transform.Find("UIManager/Low").gameObject, UIGroupId.Low);

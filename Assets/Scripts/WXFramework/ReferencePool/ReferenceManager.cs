@@ -2,11 +2,19 @@
 using System.Collections.Concurrent;
 using WXFramework.Core;
 
-namespace WXFramework.ReferencePool
+namespace WXFramework.Pool
 {
     public class ReferenceManager : Singleton<ReferenceManager>
     {
-        private ConcurrentDictionary<Type, ReferencePool> _referencePools = new();
+        private ConcurrentDictionary<Type, ReferencePool> _referencePools;
+
+        protected override void Awake()
+        {
+            lock (this)
+            {
+                _referencePools = new ConcurrentDictionary<Type, ReferencePool>();
+            }
+        }
 
         public override void Update()
         {
@@ -17,7 +25,7 @@ namespace WXFramework.ReferencePool
         {
             ReferencePool pool = GetPool<T>();
             IReference reference = pool.Get();
-            reference.IsFromPool = false;
+            reference.IsInPool = false;
             return reference;
         }
 
@@ -25,12 +33,12 @@ namespace WXFramework.ReferencePool
             where T : IReference
         {
             //已进入池中，无需再次进池
-            if (reference.IsFromPool)
+            if (reference.IsInPool)
             {
                 return;
             }
 
-            reference.IsFromPool = true;
+            reference.IsInPool = true;
             ReferencePool pool = GetPool<T>();
             pool.Return(reference);
         }

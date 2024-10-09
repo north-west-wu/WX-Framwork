@@ -1,8 +1,8 @@
-﻿namespace WXFramework.ReferencePool
+﻿namespace WXFramework.Pool
 {
     public interface IReference
     {
-        bool IsFromPool { get; set; }
+        bool IsInPool { get; set; }
         
         void Clear();
     }
