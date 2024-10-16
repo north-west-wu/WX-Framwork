@@ -2,35 +2,43 @@
 using System.Collections.Concurrent;
 using WXFramework.Core;
 
-namespace WXFramework.ReferencePool
+namespace WXFramework.Pool
 {
     public class ReferenceManager : Singleton<ReferenceManager>
     {
-        private ConcurrentDictionary<Type, ReferencePool> _referencePools = new();
+        private ConcurrentDictionary<Type, ReferencePool> _referencePools;
+
+        protected override void Awake()
+        {
+            lock (this)
+            {
+                _referencePools = new ConcurrentDictionary<Type, ReferencePool>();
+            }
+        }
 
         public override void Update()
         {
             
         }
 
-        public IReference Get<T>() where T : IReference
+        public T Get<T>() where T : class, IReference
         {
             ReferencePool pool = GetPool<T>();
             IReference reference = pool.Get();
-            reference.IsFromPool = false;
-            return reference;
+            reference.IsInPool = false;
+            return reference as T;
         }
 
         public void Return<T>(T reference)
             where T : IReference
         {
             //已进入池中，无需再次进池
-            if (reference.IsFromPool)
+            if (reference.IsInPool)
             {
                 return;
             }
 
-            reference.IsFromPool = true;
+            reference.IsInPool = true;
             ReferencePool pool = GetPool<T>();
             pool.Return(reference);
         }

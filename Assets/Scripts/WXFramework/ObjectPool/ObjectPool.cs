@@ -1,116 +1,54 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
 
 namespace WXFramework.Pool
 {
-    public class ObjectPool<T> : IObjectPool where T : Object
+    public class ObjectPool<T> : ObjectPoolBase
+        where T : ObjectBase, new()
     {
-        private List<PoolObject<T>> _poolObjects;
-        private Object _obj;
-        private string _poolName;
-        private string _path;
-        private int _count;
+        private Queue<Object<T>> _objects;
+
+        public override Type ObjectType => typeof(T);
+
+        public override int Count => _objects.Count;
         
-        /// <summary>
-        /// 池名称
-        /// </summary>
-        public string PoolName
+        public ObjectPool(string poolName) : base(poolName)
         {
-            get => _poolName;
+            _objects = new Queue<Object<T>>();
         }
 
-        /// <summary>
-        /// 池内对象数量
-        /// </summary>
-        public int Count
+        public T Get()
         {
-            get => _count;
-        }
-        
-        public ObjectPool(string poolName, string path)
-        {
-            _poolObjects = new List<PoolObject<T>>();
-            _poolName = poolName;
-            _path = path;
-            _count = 0;
-        }
-        
-        public T Get(Transform parentTransform = null)
-        {
-            PoolObject<T> po = null;
-            foreach (var poolObject in _poolObjects)
+            if (Count > 0)
             {
-                if (!poolObject.isUse)
-                {
-                    po = poolObject;
-                    break;
-                }
-            }
-
-            if (po == null)
-            {
-                po = CreatePoolObject();
-                _count++;
+                Object<T> obj = _objects.Dequeue();
+                obj.IsInPool = false;
+                obj.ObjBase.OnInit();
+                return obj.ObjBase;
             }
             
-            po.isUse = true;
-            if (po.poolObject is GameObject go)
-            {
-                go.gameObject.SetActive(true);
-                go.transform.SetParent(parentTransform, false);
-            }
+            Object<T> internalObject = ReferenceManager.Instance.Get<Object<T>>();
+            internalObject.ObjBase = new T();
+            internalObject.IsInPool = false;
+            internalObject.ObjBase.CreateObj();
             
-            return po.poolObject;
+            return internalObject.ObjBase;
         }
 
-        
-        public void Recycle(T target)
+        public bool Return(T obj)
         {
-            foreach (var po in _poolObjects)
-            {
-                if (po.poolObject == target)
-                {
-                    po.isUse = false;
-                    if (po.poolObject is GameObject go)
-                    {
-                        go.gameObject.SetActive(false);
-                    }
-                }
-            }
-        }
-
-        private PoolObject<T> CreatePoolObject()
-        {
-            if (_obj == null)
-                _obj = Resources.Load<T>(_path);
-            PoolObject<T> po = new PoolObject<T>();
-            po.poolObject = Object.Instantiate(_obj) as T;
-            po.poolObjectName = _poolName;
-            po.isUse = false;
-
-            if (po.poolObject is GameObject go)
-            {
-                go.gameObject.SetActive(false);
-            }
-            
-            _poolObjects.Add(po);
-            return po;
+            return true;
         }
         
-        public void Release()
+        public override void Release()
         {
-            foreach (var poolObject in _poolObjects)
+            foreach (var obj in _objects)
             {
-                poolObject.poolObjectName = "";
-                poolObject.isUse = false;
-                Object.Destroy(poolObject.poolObject);
+                obj.Clear();
             }
-            _poolObjects.Clear();
-            if (typeof(GameObject) != typeof(T)
-                && !typeof(Component).IsSubclassOf(typeof(T)))
-            {
-                Resources.UnloadAsset(_obj);
-            }
+            
+            _objects.Clear();
+            _objects = null;
         }
     }
 }
