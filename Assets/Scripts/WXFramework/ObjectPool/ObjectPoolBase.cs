@@ -36,10 +36,5 @@ namespace WXFramework.Pool
         /// 释放对象池未使用的对象
         /// </summary>
         public abstract void Release();
-        
-        /// <summary>
-        /// 销毁池
-        /// </summary>
-        public abstract void Destroy();
     }
 }

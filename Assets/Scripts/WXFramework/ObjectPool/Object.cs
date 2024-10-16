@@ -1,30 +1,30 @@
 ﻿namespace WXFramework.Pool
 {
     public class Object<T> : IReference
-        where T : ObjectBase
+        where T : ObjectBase, new()
     {
         private T _objectBase;
+                
+        /// <summary>
+        /// 是否在池中
+        /// </summary>
+        private bool _inPool;
 
-        public object Target
+        public T ObjBase
         {
-            get => _objectBase.Target;
+            get => _objectBase;
+            set => _objectBase = value;
         }
         
         public bool IsInPool
         {
-            get => _objectBase.IsInPool;
-            set => _objectBase.IsInPool = value;
-        }
-
-        public static void Create(T obj, object target)
-        {
-            Object<T> internalObject = ReferenceManager.Instance.Get<Object<T>>();
-            _objectBase.Init(target);
+            get => _inPool;
+            set => _inPool = value;
         }
         
         public void Clear()
         {
-            _objectBase.Clear();
+            _objectBase.OnClear();
             _objectBase = null;
         }
     }

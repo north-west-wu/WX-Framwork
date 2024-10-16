@@ -21,12 +21,12 @@ namespace WXFramework.Pool
             
         }
 
-        public IReference Get<T>() where T : IReference
+        public T Get<T>() where T : class, IReference
         {
             ReferencePool pool = GetPool<T>();
             IReference reference = pool.Get();
             reference.IsInPool = false;
-            return reference;
+            return reference as T;
         }
 
         public void Return<T>(T reference)

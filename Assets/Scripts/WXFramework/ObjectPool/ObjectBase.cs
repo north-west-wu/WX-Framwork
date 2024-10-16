@@ -8,44 +8,24 @@ namespace WXFramework.Pool
         /// 对象
         /// </summary>
         private object _target;
-        
-        /// <summary>
-        /// 是否在池中
-        /// </summary>
-        private bool _inPool;
 
         public object Target
         {
             get => _target;
         }
-
-
-        public bool IsInPool
-        {
-            get => _inPool;
-            set => _inPool = value;
-        }
-
-        public void Init(object target)
-        {
-            Init(target.GetType().Name, target);
-        }
         
-        public void Init(string name, object target)
+        public void CreateObj()
         {
-            if (target == null)
-            {
-                Debug.LogError("当前初始化对象失败，target 为 null，" + name);
-                return;
-            }
-            
-            _target = target;
+            _target = CreateObject();
+
+            //创建时，进行初始化
+            OnInit();
         }
+
+        public abstract object CreateObject();
         
-        public virtual void Clear()
-        {
-            _target = null;
-            _inPool = false;
-        }
+        public virtual void OnInit() { }
+        
+        public virtual void OnClear() { }
     }
 }
