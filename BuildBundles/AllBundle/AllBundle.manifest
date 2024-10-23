@@ -1,0 +1,10 @@
+ManifestFileVersion: 0
+CRC: 1361780878
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: allbundle_assets_bundles_ui_uimain_prefab.bundle
+      Dependencies: {}
+    Info_1:
+      Name: allbundle_assets_bundles_ui_uimain2_prefab.bundle
+      Dependencies: {}

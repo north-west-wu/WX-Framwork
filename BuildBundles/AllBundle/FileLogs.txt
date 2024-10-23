@@ -1,0 +1,3 @@
+<Assets/Bundles/UI/UIMain.prefab|allbundle_assets_bundles_ui_uimain_prefab.bundle>
+<Assets/Bundles/UI/UIMain2.prefab|allbundle_assets_bundles_ui_uimain2_prefab.bundle>
+
