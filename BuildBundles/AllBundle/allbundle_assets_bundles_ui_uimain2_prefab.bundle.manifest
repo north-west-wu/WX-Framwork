@@ -1,0 +1,21 @@
+ManifestFileVersion: 0
+CRC: 2367637932
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 892bead302569854f121845805491571
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 3f6fb2bc9a8d339ae6b0da693159c464
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 223
+  Script: {instanceID: 0}
+- Class: 224
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/Bundles/UI/UIMain2.prefab
+Dependencies: []

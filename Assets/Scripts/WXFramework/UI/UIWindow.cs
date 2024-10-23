@@ -61,25 +61,25 @@ namespace WXFramework.UI
         public void Load(Transform parent)
         {
             //资源加载先使用 AssetDatabase 同步加载，后续完善资源管理和加载模块
-            GameObject gameObjectRes = AssetDatabase.LoadAssetAtPath<GameObject>(_auiBase.AssetPath);
-            _gameObject = Object.Instantiate(gameObjectRes);
-            RectTransform transform = _gameObject.GetComponent<RectTransform>();
-            transform.anchorMin = Vector2.zero;
-            transform.anchorMax = Vector2.one;
-            transform.anchoredPosition = Vector2.zero;
-            transform.sizeDelta = Vector2.zero;
-            transform.SetParent(parent);
-            
-            Canvas canvas = _gameObject.GetOrAddComponent<Canvas>();
-            canvas.overrideSorting = true;
-            canvas.sortingOrder = 0;
-            
-            _gameObject.GetOrAddComponent<GraphicRaycaster>();
-            
-            DepthChanged(_depth);
-
-            _auiBase.UIWindow = this;
-            _auiBase.OnInit();
+            // GameObject gameObjectRes = AssetDatabase.LoadAssetAtPath<GameObject>(_auiBase.AssetPath);
+            // _gameObject = Object.Instantiate(gameObjectRes);
+            // RectTransform transform = _gameObject.GetComponent<RectTransform>();
+            // transform.anchorMin = Vector2.zero;
+            // transform.anchorMax = Vector2.one;
+            // transform.anchoredPosition = Vector2.zero;
+            // transform.sizeDelta = Vector2.zero;
+            // transform.SetParent(parent);
+            //
+            // Canvas canvas = _gameObject.GetOrAddComponent<Canvas>();
+            // canvas.overrideSorting = true;
+            // canvas.sortingOrder = 0;
+            //
+            // _gameObject.GetOrAddComponent<GraphicRaycaster>();
+            //
+            // DepthChanged(_depth);
+            //
+            // _auiBase.UIWindow = this;
+            // _auiBase.OnInit();
         }
 
         public void Cover()
