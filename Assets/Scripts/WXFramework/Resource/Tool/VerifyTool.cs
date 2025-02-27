@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
+using UnityEngine.Networking;
 
 namespace WXFramwork.Resource
 {
     /// <summary>
     /// 验证攻击
     /// </summary>
-    public class VerifyTool
+    public static class VerifyTool
     {
         /// <summary>
         /// 获取 MD5 码
@@ -23,6 +25,39 @@ namespace WXFramwork.Resource
             return sb.ToString();
         }
         
+        /// <summary>
+        /// 得到一个路径下文件的CRC32
+        /// </summary>
+        internal static async Task<uint> GetFileCRC32(string filePath)
+        {
+            uint fileCRC32;
+            TaskCompletionSource<bool> tcs = new TaskCompletionSource<bool>();
+            using (UnityWebRequest webRequest = UnityWebRequest.Get(filePath))
+            {
+                webRequest.timeout = 0;
+                UnityWebRequestAsyncOperation weq = webRequest.SendWebRequest();
+                weq.completed += o =>
+                {
+                    tcs.SetResult(true);
+                };
+                await tcs.Task;
+                
+                if (webRequest.result == UnityWebRequest.Result.Success)
+                {
+                    byte[] data = webRequest.downloadHandler.data;
+                    fileCRC32 = VerifyTool.GetCRC32(data);
+                }
+                else
+                {
+                    fileCRC32 = 0;
+                }
+            }
+            return fileCRC32;
+        }
+        
+        /// <summary>
+        /// CRC 32 码
+        /// </summary>
         public static uint GetCRC32(byte[] bytes)
         {
             uint iCount = (uint)bytes.Length;
@@ -32,6 +67,35 @@ namespace WXFramwork.Resource
                 crc = (crc << 8) ^ CRCTable[(crc >> 24) ^ bytes[i]];
             }
             return crc;
+        }
+        
+        /// <summary>
+        /// 异步获取数据
+        /// </summary>
+        internal static async Task<byte[]> GetDataAsync(string filePath)
+        {
+            byte[] encryptData;
+            TaskCompletionSource<bool> tcs = new TaskCompletionSource<bool>();
+            using (UnityWebRequest webRequest = UnityWebRequest.Get(filePath))
+            {
+                UnityWebRequestAsyncOperation weq = webRequest.SendWebRequest();
+                weq.completed += (o) =>
+                {
+                    tcs.SetResult(true);
+                };
+                
+                await tcs.Task;
+                
+                if (webRequest.result == UnityWebRequest.Result.Success)
+                {
+                    encryptData = webRequest.downloadHandler.data;
+                }
+                else
+                {
+                    encryptData = null;
+                }
+            }
+            return encryptData;
         }
         
         /// <summary>
