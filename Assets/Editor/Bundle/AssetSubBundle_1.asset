@@ -12,12 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 0}
   m_Name: AssetSubBundle_1
   m_EditorClassIdentifier: Assembly-CSharp-Editor:WXFramwork.Resource.Editor:AssetSubBundle
-  BuildName: AllBundle
+  BuildName: 
   BuildIndex: 0
-  BundleVariant: bundle
+  BundleVariant: 
   NameByHash: 0
-  BuildAssetBundleOptions: 768
-  AssetPaths:
-  - Assets/Bundles/UI
+  BuildAssetBundleOptions: 1
+  AssetPaths: []
   AssetGroupPaths: []
   SceneAssets: []

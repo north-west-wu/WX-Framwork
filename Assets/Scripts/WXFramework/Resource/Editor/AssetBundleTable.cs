@@ -41,7 +41,7 @@ namespace WXFramwork.Resource.Editor
                     info = new DirectoryInfo(path);
                 }
                 return info.FullName;
-            }
+            }  
         }
     }
     
